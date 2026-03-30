@@ -106,7 +106,10 @@ export default function CatalogOptions({ catalog, onUpdate }: Props) {
         <DeleteCatalogModal
           catalog={catalog}
           onClose={() => setShowDeleteModal(false)}
-          onSuccess={onUpdate}
+          onSuccess={() => {
+            setShowDeleteModal(false);
+            onUpdate();
+          }}
         />
       )}
     </>
