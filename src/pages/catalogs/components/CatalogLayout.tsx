@@ -61,22 +61,32 @@ export default function CatalogLayout({
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
               <h1 className="text-2xl font-bold text-gray-900">{catalog.name}</h1>
               {catalog.description && (
-                <p className="mt-2 text-gray-600">{catalog.description}</p>
+                <p className="mt-1 text-gray-600">{catalog.description}</p>
               )}
             </div>
-            {catalog.profile.logo_url && (
-              <div className="flex-shrink-0 ml-4">
+            <div className="flex items-center gap-4 flex-shrink-0">
+              {catalog.contact_button_label && catalog.contact_button_url && (
+                <a
+                  href={catalog.contact_button_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-white bg-[#ed1c24] hover:bg-[#d91920] transition-colors shadow-sm whitespace-nowrap"
+                >
+                  {catalog.contact_button_label}
+                </a>
+              )}
+              {catalog.profile.logo_url && (
                 <img
                   src={catalog.profile.logo_url}
                   alt="Brand Logo"
                   className="h-12 w-auto object-contain"
                 />
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </header>

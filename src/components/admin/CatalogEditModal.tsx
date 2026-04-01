@@ -11,6 +11,13 @@ type Catalog = Database["public"]["Tables"]["catalogs"]["Row"];
 const schema = z.object({
     name: z.string().min(1, "Name is required").max(100, "Name is too long"),
     description: z.string().max(500, "Description is too long").nullable(),
+    contact_button_label: z.string().max(50, "Label is too long").nullable(),
+    contact_button_url: z
+        .string()
+        .url("Must be a valid URL")
+        .max(500, "URL is too long")
+        .nullable()
+        .or(z.literal("")),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -37,12 +44,18 @@ export default function CatalogEditModal({
         defaultValues: {
             name: catalog.name,
             description: catalog.description || "",
+            contact_button_label: catalog.contact_button_label || "",
+            contact_button_url: catalog.contact_button_url || "",
         },
     });
 
     const onSubmit = async (data: FormData) => {
         try {
-            await updateCatalog(catalog.id, data);
+            await updateCatalog(catalog.id, {
+                ...data,
+                contact_button_label: data.contact_button_label || null,
+                contact_button_url: data.contact_button_url || null,
+            });
             toast.success("Catalog updated successfully");
             onSuccess();
         } catch (error: unknown) {
@@ -106,6 +119,57 @@ export default function CatalogEditModal({
                                 {errors.description.message}
                             </p>
                         )}
+                    </div>
+
+                    <div className="border-t pt-4">
+                        <p className="text-sm font-medium text-gray-700 mb-3">
+                            Contact Button{" "}
+                            <span className="text-gray-400 font-normal">
+                                (optional)
+                            </span>
+                        </p>
+                        <div className="space-y-3">
+                            <div>
+                                <label
+                                    htmlFor="contact_button_label"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Button Label
+                                </label>
+                                <input
+                                    type="text"
+                                    id="contact_button_label"
+                                    {...register("contact_button_label")}
+                                    placeholder="e.g. Book Appointment, Contact Us, Call Us"
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ed1c24] focus:ring-[#ed1c24] sm:text-sm px-4 py-3 border"
+                                />
+                                {errors.contact_button_label && (
+                                    <p className="mt-1 text-sm text-red-600">
+                                        {errors.contact_button_label.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor="contact_button_url"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Button URL
+                                </label>
+                                <input
+                                    type="url"
+                                    id="contact_button_url"
+                                    {...register("contact_button_url")}
+                                    placeholder="https://..."
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ed1c24] focus:ring-[#ed1c24] sm:text-sm px-4 py-3 border"
+                                />
+                                {errors.contact_button_url && (
+                                    <p className="mt-1 text-sm text-red-600">
+                                        {errors.contact_button_url.message}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
                     <div className="flex justify-end space-x-3 pt-4">

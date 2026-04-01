@@ -43,6 +43,8 @@ export type Database = {
       }
       catalogs: {
         Row: {
+          contact_button_label: string | null
+          contact_button_url: string | null
           created_at: string | null
           description: string | null
           id: string
@@ -54,6 +56,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          contact_button_label?: string | null
+          contact_button_url?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -65,6 +69,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          contact_button_label?: string | null
+          contact_button_url?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
